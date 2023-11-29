@@ -1,5 +1,5 @@
 import { Navbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import { FaReact, FaShoppingCart, FaUser } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,8 @@ import { logout } from '../slices/authSlice';
 import SearchBox from './SearchBox';
 import logo from '../assets/logo.png';
 import { resetCart } from '../slices/cartSlice';
-
+import { VscSearchFuzzy } from 'react-icons/vsc';
+import './Header.css';
 const Header = () => {
     const { cartItems } = useSelector((state) => state.cart);
     const { userInfo } = useSelector((state) => state.auth);
@@ -37,8 +38,14 @@ const Header = () => {
                 <Container>
                     <LinkContainer to='/'>
                         <Navbar.Brand>
-                            <img src={logo} alt='ProShop' />
-                            Nhóm 21 Công Nghệ Phần Mềm
+                            <div className='logo'>
+                                <div>
+                                    <FaReact className='rotate icon-react' color='#5ed4f4' />
+                                </div>
+                                <div>
+                                    Nhóm 21 Công Nghệ Phần Mềm
+                                </div>
+                            </div>
                         </Navbar.Brand>
                     </LinkContainer>
                     <Navbar.Toggle aria-controls='basic-navbar-nav' />

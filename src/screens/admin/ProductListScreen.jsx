@@ -1,7 +1,7 @@
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import Paginate from '../../components/Paginate';
@@ -11,14 +11,17 @@ import {
     useCreateProductMutation,
 } from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
+import CreateProductModal from './CreateProductModal';
 
 const ProductListScreen = () => {
     const { pageNumber } = useParams();
-
+    const [Id, setId] = useState('');
     const { data, isLoading, error, refetch } = useGetProductsQuery({
         pageNumber,
     });
-
+    const [openModal, setOpenModal] = useState(false);
+    const [dataCreate, setDataCreate] = useState([]);
 
     const [deleteProduct, { isLoading: loadingDelete }] =
         useDeleteProductMutation();
@@ -34,18 +37,27 @@ const ProductListScreen = () => {
         }
     };
 
+    const navigate = useNavigate();
+
     const [createProduct, { isLoading: loadingCreate }] =
         useCreateProductMutation();
 
     const createProductHandler = async () => {
         if (window.confirm('Are you sure you want to create a new product?')) {
             try {
-                await createProduct();
+                let res = await createProduct();
+                // setDataCreate(res);
+                // setOpenModal(true);
+                console.log("check fdsafdsa ", res.data._id);
+                console.log("check res", res.data.user);
+                setId(res.data.user);
+                navigate(`/admin/product/${res.data._id}/create`);
                 refetch();
             } catch (err) {
                 toast.error(err?.data?.message || err.error);
             }
         }
+
     };
 
     return (
@@ -107,6 +119,7 @@ const ProductListScreen = () => {
                         </tbody>
                     </Table>
                     <Paginate pages={data.pages} page={data.page} isAdmin={true} />
+
                 </>
             )}
         </>

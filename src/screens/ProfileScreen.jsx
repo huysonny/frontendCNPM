@@ -49,7 +49,11 @@ const ProfileScreen = () => {
             }
         }
     };
-
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        const formattedDate = new Date(dateString).toLocaleDateString(undefined, options);
+        return formattedDate;
+    };
     return (
         <Row>
             <Col md={3}>
@@ -117,8 +121,6 @@ const ProfileScreen = () => {
                                 <th>ID</th>
                                 <th>DATE</th>
                                 <th>TOTAL</th>
-                                <th>PAID</th>
-                                <th>DELIVERED</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -126,22 +128,9 @@ const ProfileScreen = () => {
                             {orders.map((order) => (
                                 <tr key={order._id}>
                                     <td>{order._id}</td>
-                                    <td>{order.createdAt.substring(0, 10)}</td>
+                                    <td>{formatDate(order.createdAt)}</td>
                                     <td>{order.totalPrice}</td>
-                                    <td>
-                                        {order.isPaid ? (
-                                            order.paidAt.substring(0, 10)
-                                        ) : (
-                                            <FaTimes style={{ color: 'red' }} />
-                                        )}
-                                    </td>
-                                    <td>
-                                        {order.isDelivered ? (
-                                            order.deliveredAt.substring(0, 10)
-                                        ) : (
-                                            <FaTimes style={{ color: 'red' }} />
-                                        )}
-                                    </td>
+                                    <td></td>
                                     <td>
                                         <LinkContainer to={`/order/${order._id}`}>
                                             <Button className='btn-sm' variant='light'>
